@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 criterion = "0.4.0"
+fuel-crypto = "0.27.0"
 fuel-types = "0.27.0"
 fuel-merkle = "0.27.0"
 

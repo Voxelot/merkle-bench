@@ -14,11 +14,27 @@ fn code_roots(c: &mut Criterion) {
     c.bench_function("quad word sized chunks", |b| {
         b.iter(|| merkle_adjustable_chunk_size::<32>(black_box(&bytes)))
     });
-    c.bench_function("1 kib sized chunks", |b| {
+    c.bench_function("1k sized chunks", |b| {
         b.iter(|| merkle_adjustable_chunk_size::<1024>(black_box(&bytes)))
     });
-    c.bench_function("page sized chunks", |b| {
+    c.bench_function("4k sized chunks", |b| {
         b.iter(|| merkle_adjustable_chunk_size::<4096>(black_box(&bytes)))
+    });
+    c.bench_function("16k sized chunks", |b| {
+        b.iter(|| merkle_adjustable_chunk_size::<16384>(black_box(&bytes)))
+    });
+    c.bench_function("32k sized chunks", |b| {
+        b.iter(|| merkle_adjustable_chunk_size::<32768>(black_box(&bytes)))
+    });
+    c.bench_function("64k sized chunks", |b| {
+        b.iter(|| merkle_adjustable_chunk_size::<65536>(black_box(&bytes)))
+    });
+    c.bench_function("128k sized chunks", |b| {
+        b.iter(|| merkle_adjustable_chunk_size::<131072>(black_box(&bytes)))
+    });
+
+    c.bench_function("plain sha256", |b| {
+        b.iter(|| plain_sha256(black_box(&bytes)))
     });
 }
 
@@ -46,4 +62,8 @@ fn merkle_adjustable_chunk_size<const CHUNK_SIZE: usize>(bytes: &[u8]) -> Bytes3
         .for_each(|l| tree.push(l.as_ref()));
 
     tree.root().into()
+}
+
+fn plain_sha256(bytes: &[u8]) -> Bytes32 {
+    fuel_crypto::Hasher::hash(bytes)
 }
